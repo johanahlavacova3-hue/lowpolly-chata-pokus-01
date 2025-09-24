@@ -1,4 +1,4 @@
-//pokus 1//
+//pokus 2//
 
 <html>
   <head>
@@ -7,8 +7,15 @@
   </head>
   <body style="margin:0; overflow:hidden;">
     <a-scene embedded arjs>
+      <!-- marker -->
       <a-marker preset="hiro">
-        <a-box color="red" position="0 0.5 0"></a-box>
+        <!-- 3D model chaty -->
+        <a-entity 
+          gltf-model="chata.glb" 
+          scale="0.5 0.5 0.5" 
+          position="0 0.5 0" 
+          rotation="0 180 0">
+        </a-entity>
       </a-marker>
       <a-entity camera></a-entity>
     </a-scene>
