@@ -1,4 +1,4 @@
-<!-- AR chata s vlastnímmkim markerm em   -->
+<!-- AR chata s Hiro markerem -->
 <html>
   <head>
     <meta charset="utf-8">
@@ -6,7 +6,7 @@
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
     <style>
-      /* Styl info mmmmbommccooommmcmmmmxu */
+      /* Styl info boxu */
       #info {
         position: fixed;
         bottom: 10px;
@@ -27,12 +27,13 @@
   <body style="margin:0; overflow:hidden;">
     <a-scene embedded arjs>
       
-      <!-- Vlastní marker (nahrazuje Hiro) -->
-      <a-marker type="pattern" url="chata-marker-2.patt">
+      <!-- Hiro marker -->
+      <a-marker preset="hiro">
         <a-entity 
-          gltf-model="game.glb" 
+          gltf-model="lowpolly.chata.all.glb" 
           scale="0.8 0.8 0.8" 
-          position="0 0 0">
+          position="0 0 0"
+          animation-mixer="loop: repeat">
         </a-entity>
       </a-marker>
   
@@ -41,7 +42,7 @@
 
     <!-- Info box -->
     <div id="info">
-      Namířte kameru na vlastní marker a povolte přístup ke kameře
+      Namířte kameru na marker a povolte přístup ke kameře
     </div>
 
     <script>
