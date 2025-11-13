@@ -1,49 +1,83 @@
-
-
-<!-- pokuuuiiius -->
-
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MindAR Image Tracking (CHATA-vizitka)</title>
+
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mindar-image@1.2.1/dist/mindar-image-aframe.prod.js"></script>
+
     <style>
-      <!-- Styl info boxu - nefunguje -->
       #info {
         position: fixed;
         bottom: 10px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.7);
         color: white;
-        padding: 8px 12px;
-        border-radius: 5px;
+        padding: 10px 15px;
+        border-radius: 8px;
         font-family: sans-serif;
-        font-size: 14px;
+        font-size: 16px;
         z-index: 1000;
         text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       }
     </style>
   </head>
-  <body style="margin:0; overflow:hidden;">
-    <a-scene embedded arjs>
-      
-      <!-- Hiro marker -->
-      <a-marker preset="hiro">
-        <a-entity gltf-model="CHATICKA.glb" scale="0.8 0.8 0.8" position="0 0 0"></a-entity>
-      </a-marker>
-  
-      <a-entity camera></a-entity>
+
+  <body style="margin: 0; overflow: hidden;">
+    <a-scene
+      mindar-image="imageTargetSrc: ./CHATA-vizitka.mind; autoStart: true;"
+      embedded
+      color-space="srgb"
+      renderer="colorManagement: true, physicallyCorrectLights: true"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+    >
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-image-target="targetIndex: 0">
+        
+        <a-entity
+          gltf-model="CHATICKA.glb"
+          scale="0.8 0.8 0.8"
+          position="0 0 0.1"
+          rotation="90 0 0"
+        ></a-entity>
+      </a-entity>
     </a-scene>
 
-    <!-- Info box -->
     <div id="info">
-      Namířte kameru na marker a povolte přístup ke kameře
+      Namířte kameru na **vytištěnou vizitku/obrázek** a povolte přístup.
     </div>
 
     <script>
-      // info box zmizí
-      document.querySelector('a-scene').addEventListener('loaded', () => {
-        document.getElementById('info').style.display = 'none';
+      const infoBox = document.getElementById('info');
+      const scene = document.querySelector('a-scene');
+
+      // Schová info box při prvním nalezení cíle
+      scene.addEventListener('targetFound', () => {
+        infoBox.style.display = 'none';
+      });
+
+      // Zobrazí informaci o ztrátě cíle
+      scene.addEventListener('targetLost', () => {
+        infoBox.style.display = 'block';
+        infoBox.textContent = 'Cíl ztracen. Zkuste se na obrázek znovu zaměřit.';
+      });
+
+      // Zkontroluje, zda scéna nastartovala a schová úvodní zprávu (pokud nedojde k chybě)
+      scene.addEventListener('arReady', () => {
+        infoBox.textContent = 'Povolte přístup ke kameře a zaměřte se na obrázek.';
+      });
+      
+      // Můžete přidat posluchače pro chybu (např. nepovolený přístup ke kameře nebo nenalezený targets.mind)
+      scene.addEventListener('arError', (err) => {
+        infoBox.style.background = 'red';
+        infoBox.textContent = 'CHYBA AR: Něco se nepodařilo. Zkontrolujte soubor .mind a oprávnění kamery.';
+        console.error("MindAR Error:", err);
       });
     </script>
   </body>
